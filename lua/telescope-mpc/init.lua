@@ -9,6 +9,9 @@ local utils = require("telescope.previewers.utils")
 
 local logger = require("plenary.log")
 
+local M = {}
+
+-- TODO: refactor hardcoded
 local index_file = vim.fn.expand("~/Music/index.json")
 
 local function read_index()
@@ -52,7 +55,7 @@ local function format_track(track)
 	}
 end
 
-local track_picker = function(opts)
+M.track_picker = function(opts)
 	opts = opts or {}
 	pickers
 	    .new(opts, {
@@ -114,7 +117,7 @@ local track_picker = function(opts)
 	    :find()
 end
 
-vim.keymap.set("n", "<leader>w", "<cmd>wall<cr><cmd>source %<cr>")
-
 -- to execute the function
-track_picker()
+-- M.track_picker()
+
+return M
