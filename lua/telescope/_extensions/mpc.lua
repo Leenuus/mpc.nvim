@@ -9,8 +9,6 @@ local utils = require("telescope.previewers.utils")
 
 local logger = require("plenary.log")
 
-local M = {}
-
 -- TODO: refactor hardcoded
 local index_file = vim.fn.expand("~/Music/index.json")
 
@@ -55,7 +53,7 @@ local function format_track(track)
 	}
 end
 
-M.track_picker = function(opts)
+local track_picker = function(opts)
 	opts = opts or {}
 	pickers
 	    .new(opts, {
@@ -107,6 +105,7 @@ M.track_picker = function(opts)
 		    previewer = previewers.new_buffer_previewer({
 			    title = "track",
 			    define_preview = function(self, entry, status)
+				    -- TODO: define highlight
 				    local track = entry["value"]
 				    local lines = format_track(track)
 				    vim.api.nvim_buf_set_lines(self.state.bufnr, 0, 0, true, lines)
@@ -117,7 +116,14 @@ M.track_picker = function(opts)
 	    :find()
 end
 
--- to execute the function
--- M.track_picker()
-
-return M
+return require("telescope").register_extension({
+	-- TODO: give user power to change config
+	setup = function(ext_config, config) end,
+	exports = {
+		-- file_browser = file_browser,
+		-- actions = fb_actions,
+		-- finder = fb_finders,
+		-- NOTE: name it the same as plugin name, so it can be access without pain
+		["mpc"] = track_picker,
+	},
+})
